@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160104170245) do
+ActiveRecord::Schema.define(version: 20160104211130) do
+
+  create_table "skeets", force: :cascade do |t|
+    t.string  "title"
+    t.string  "body"
+    t.integer "author"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "fname"
