@@ -1,30 +1,74 @@
 require 'sinatra'
 require 'sinatra/activerecord'
+require 'sinatra/flash'
 
-set :database, "sqlite3:flash_practice.sqlite3"
+configure(:development){set :database, "sqlite3:flash_practice.sqlite3"}
 
 require './models'
 enable :sessions
 
-get '/' do
-	erb :home
+def current_user
+	if session[:user_id]
+		@current_skeeter = User.find(session[:user_id])
+	end
 end
 
-post '/signin' do
+get '/' do
+	erb :home
+	end
 
-
-	redirect '/signedin'
+post '/' do
+	@skeeter = User.where(email: params[:email]).first
+	if params[:password] == @skeeter.password
+		session[:user_id] = @skeeter.id
+		flash[:notice] = "Hope you're ready to skeet!"
+		redirect '/signedin'
+	else
+		flash[:notice] = 'Try again, darkness my old friend!'
+		redirect '/'
+	end
 end
 
 
 post '/signup' do
-		@current_user = User.new fname: params[:fname], lname: params[:lname], email: params[:email], password: params[:password]
-		
-	redirect
-	'/signedin'
+		@skeeter = User.new(fname: params[:fname], lname: params[:lname], email: params[:email], password: params[:password])
+		if @skeeter.save 
+		flash[:notice] = "Hope you're ready to skeet!"
+		session[:user_id] = @skeeter.id
+		redirect '/signedin'
+		else
+		flash[:notice] = "Try again, darkness my old friend."
+	end
 end
 
 get '/signedin' do
+	@skeeter = current_user
 	erb :signedin
-	
+end
+
+get '/edit' do 
+	erb :edit
+end
+
+post '/signedin' do 
+	@skeeter = current_user
+	if params[:fname] && params[:lname] && params[:email] && params[:password] != nil
+		@skeeter.update(fname: params[:fname])
+		@skeeter.update(lname: params[:lname]) 
+		@skeeter.update(email: params[:email]) 
+		@skeeter.update(password: params[:password])
+		redirect '/signedin'
+	end
+
+end
+
+ get '/logout' do
+ 	session.clear
+	redirect '/'
+	flash[:notice] = "Hope to Skeet with you again!"
+end
+get '/destroy' do
+	@current_skeeter = current_user
+	User.destroy(@current_skeeter)
+	redirect '/'
 end

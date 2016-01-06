@@ -1,0 +1,29 @@
+<p>
+	Do you want a new name? A new game? Are you tired, drowsy, full of shame? Ok I'll stop rhyming...it's lame. 
+</p>
+<p>
+	Change your details below! (NOTE: Please fill in all fields- empty fields will be registered as blank!)
+</p>
+
+<form method="POST" action="/signedin">
+
+	<label for="fname">First Name</label>
+	<input type="text" name="fname">
+
+	<label for="lname">Last Name</label>
+	<input type="text" name="lname">
+
+	<label for="email">Email address</label>
+	<input type="text" name="email">
+
+	<label for="password">Password</label>
+	<input type="password" name="password">
+
+	<input type="submit">
+</form>
+
+<h3>
+	<form method = "GET" action = "/destroy">
+		<input type = "submit" value="DESTROY ACCOUNT? WARNING - THIS ACTION CANNOT BE UNDONE.">
+	</form>
+ </h3>

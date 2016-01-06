@@ -9,6 +9,11 @@
 	<h1 class="welcome">
 		Skeet Meet - Where we meet to Skeet togther!
 	</h1>
+	<% if flash[:notice] %>
+		<div class="flash notice">
+			<%= flash[:notice] %>
+		</div>
+	<% end %>
 <%= yield%>
 </body>
 </html>
