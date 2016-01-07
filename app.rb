@@ -15,7 +15,7 @@ end
 
 get '/' do
 	erb :home
-	end
+end
 
 post '/' do
 	@skeeter = User.where(email: params[:email]).first
@@ -33,12 +33,12 @@ end
 post '/signup' do
 		@skeeter = User.new(fname: params[:fname], lname: params[:lname], email: params[:email], password: params[:password])
 		if @skeeter.save 
-		flash[:notice] = "Hope you're ready to skeet!"
-		session[:user_id] = @skeeter.id
-		redirect '/signedin'
+			flash[:notice] = "Hope you're ready to skeet!"
+			session[:user_id] = @skeeter.id
+			redirect '/signedin'
 		else
-		flash[:notice] = "Try again, darkness my old friend."
-	end
+			flash[:notice] = "Try again, darkness my old friend."
+		end
 end
 
 get '/signedin' do
@@ -52,6 +52,7 @@ end
 
 post '/signedin' do 
 	@skeeter = current_user
+	@skeets = Skeet.all
 	if params[:fname] && params[:lname] && params[:email] && params[:password] != nil
 		@skeeter.update(fname: params[:fname])
 		@skeeter.update(lname: params[:lname]) 
@@ -59,14 +60,23 @@ post '/signedin' do
 		@skeeter.update(password: params[:password])
 		redirect '/signedin'
 	end
-
 end
 
- get '/logout' do
+get '/newpost' do 
+	erb :newpost
+end
+
+post '/newpost' do
+	@skeets = Skeet.create(title: params[:title], body: params[:body])
+	redirect '/'
+end
+
+get '/logout' do
  	session.clear
 	redirect '/'
 	flash[:notice] = "Hope to Skeet with you again!"
 end
+
 get '/destroy' do
 	@current_skeeter = current_user
 	User.destroy(@current_skeeter)
