@@ -62,14 +62,29 @@ post '/signedin' do
 	end
 end
 
-get '/newpost' do 
+get '/newpost' do
+	@skeets = Skeet.all
+	@user = current_user
+	# @skeets = Skeet.create( body: params[:body])
 	erb :newpost
+
 end
 
 post '/newpost' do
-	@skeets = Skeet.create(title: params[:title], body: params[:body])
-	redirect '/'
+	@user = current_user
+	@skeets = Skeet.new(body: params[:body])
+		if @skeets.save
+			flash[:notice] ="Aww, look at that sweet Skeet!"
+			redirect '/newpost'
+		else
+			flash[:notice] ="Your Skeet is simply not up to par."
+			redirect '/'
+		end
 end
+
+# post '/editpost'
+# 'Hello World!'
+# end
 
 get '/logout' do
  	session.clear
