@@ -65,9 +65,7 @@ end
 get '/newpost' do
 	@skeets = Skeet.all
 	@user = current_user
-	# @skeets = Skeet.create( body: params[:body])
 	erb :newpost
-
 end
 
 post '/newpost' do
@@ -82,15 +80,30 @@ post '/newpost' do
 		end
 end
 
-# post '/editpost'
-# 'Hello World!'
-# end
+
 
 get '/logout' do
  	session.clear
 	redirect '/'
 	flash[:notice] = "Hope to Skeet with you again!"
 end
+
+post '/edit_post' do 
+	@skeets = Skeet.last
+	if params[:body] != nil
+		@skeets.update(body: params[:body])
+		redirect '/newpost'
+	else
+		flash[:alert]="You must enter more than a blank edit."
+	end
+end
+
+get '/destroy_post' do
+	@current_skeet = Skeet.last
+	Skeet.destroy(@current_skeet)
+	redirect '/newpost'
+end
+
 
 get '/destroy' do
 	@current_skeeter = current_user

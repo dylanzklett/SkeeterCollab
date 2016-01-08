@@ -1,3 +1,18 @@
 <% @skeets.each do |post| %>
-	<%=post.body %>
+	<p><%=post.body %></p>
 <% end %>
+
+<form method="POST" action="/edit_post">
+
+	<label for="body">Edit Last Skeet?</label>
+	<input type="text" name="body">
+	<input type="submit" value="Edit Last Skeet?">
+
+</form>
+
+
+<h3>
+	<form method = "GET" action = "/destroy_post">
+		<input type = "submit" value="DESTROY LAST SKEET?">
+	</form>
+ </h3>
