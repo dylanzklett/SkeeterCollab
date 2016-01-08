@@ -71,7 +71,7 @@ end
 post '/newpost' do
 	@user = current_user
 	@skeets = Skeet.new(body: params[:body])
-		if @skeets.save
+		if (params[:body].length <= 150) && @skeets.save
 			flash[:notice] ="Aww, look at that sweet Skeet!"
 			redirect '/newpost'
 		else
